@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>URL Launcher</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      background: #f4f4f4;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      margin: 0;
+    }
+
+    .box {
+      background: white;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 32px;
+      width: 100%;
+      max-width: 420px;
+    }
+
+    h1 {
+      font-size: 1.2rem;
+      margin: 0 0 20px;
+      color: #222;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      padding: 10px 12px;
+      font-size: 1rem;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      box-sizing: border-box;
+      margin-bottom: 14px;
+      outline: none;
+    }
+
+    input[type="text"]:focus {
+      border-color: #555;
+    }
+
+    .buttons {
+      display: flex;
+      gap: 8px;
+    }
+
+    button {
+      flex: 1;
+      padding: 10px;
+      font-size: 0.9rem;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      background: #fff;
+      cursor: pointer;
+      color: #333;
+    }
+
+    button:hover {
+      background: #f0f0f0;
+    }
+
+    .error {
+      color: red;
+      font-size: 0.85rem;
+      margin-top: 10px;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+
+<div class="box">
+  <h1>URL Launcher</h1>
+  <input type="text" id="urlInput" placeholder="https://example.com" />
+  <div class="buttons">
+    <button onclick="go('same')">Same Tab</button>
+    <button onclick="go('tab')">New Tab</button>
+    <button onclick="go('window')">New Window</button>
+  </div>
+  <div class="error" id="err">Please enter a valid URL.</div>
+</div>
+
+<script>
+  function go(mode) {
+    let url = document.getElementById('urlInput').value.trim();
+    const err = document.getElementById('err');
+    if (!url) { err.style.display = 'block'; return; }
+    if (!/^https?:\/\//i.test(url)) url = 'https://' + url;
+    try { new URL(url); } catch { err.style.display = 'block'; return; }
+    err.style.display = 'none';
+    if (mode === 'same')   window.location.href = url;
+    if (mode === 'tab')    window.open(url, '_blank');
+    if (mode === 'window') window.open(url, '_blank', 'width=1100,height=750');
+  }
+
+  document.getElementById('urlInput').addEventListener('keydown', e => {
+    if (e.key === 'Enter') go('tab');
+  });
+</script>
+
+</body>
+</html>
