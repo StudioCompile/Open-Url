@@ -20,9 +20,10 @@
     .box {
       background: #171717;
       border: 1px solid #262626;
-      padding: 18px;
+      border-radius: 4px;
+      padding: 16px;
       width: 100%;
-      max-width: 320px;
+      max-width: 340px;
     }
     input[type="text"] {
       width: 100%;
@@ -31,6 +32,7 @@
       font-size: 0.85rem;
       font-family: inherit;
       border: 1px solid #2a2a2a;
+      border-radius: 4px;
       background: #0b0b0b;
       color: #eee;
       outline: none;
@@ -39,27 +41,6 @@
     input[type="text"]::placeholder { color: #4a4a4a; }
     input[type="text"]:focus { border-color: #666; }
 
-    .row { display: flex; align-items: stretch; gap: 6px; }
-    .row input[type="text"] { flex: 1; }
-
-    .icon-btn {
-      flex: 0 0 36px;
-      width: 36px;
-      height: 36px;
-      padding: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border: 1px solid #2a2a2a;
-      background: #1c1c1c;
-      color: #888;
-      cursor: pointer;
-      transition: background 0.12s, color 0.12s, border-color 0.12s;
-    }
-    .icon-btn:hover { background: #232323; color: #ddd; border-color: #3a3a3a; }
-    .icon-btn:active { background: #292929; }
-    .icon-btn svg { width: 16px; height: 16px; display: block; }
-
     .error {
       color: #e05555;
       font-size: 0.72rem;
@@ -67,103 +48,206 @@
       display: none;
     }
 
-    .divider { border-top: 1px solid #262626; margin: 14px 0 10px; }
+    .divider { border-top: 1px solid #262626; margin: 16px 0; }
 
-    .bm-list { max-height: 200px; overflow-y: auto; }
+    .bm-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
 
-    .bm-item {
+    .tile {
+      position: relative;
+      width: 40px;
+      height: 40px;
+      border: 1px solid #2a2a2a;
+      border-radius: 4px;
+      background: #121212;
       display: flex;
       align-items: center;
-      height: 34px;
-      padding: 0 10px;
-      font-size: 0.8rem;
-      border: 1px solid #212121;
-      margin-bottom: 5px;
+      justify-content: center;
       cursor: pointer;
-      background: #121212;
-      color: #ccc;
+      overflow: hidden;
       transition: background 0.12s, border-color 0.12s;
     }
-    .bm-item:last-child { margin-bottom: 0; }
-    .bm-item:hover { background: #1a1a1a; border-color: #333; }
+    .tile:hover { background: #1c1c1c; border-color: #3a3a3a; }
 
-    .bm-name {
-      flex: 1;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-    }
-
-    .bm-actions { display: flex; }
-    .bm-actions span {
-      width: 22px;
-      text-align: center;
-      color: #555;
-      cursor: pointer;
+    .tile img { width: 18px; height: 18px; }
+    .tile .fallback {
       font-size: 0.8rem;
-      transition: color 0.12s;
+      font-weight: 600;
+      color: #999;
+      text-transform: uppercase;
     }
-    .bm-actions span:hover { color: #e05555; }
 
-    ::-webkit-scrollbar { width: 5px; }
-    ::-webkit-scrollbar-thumb { background: #2c2c2c; }
+    .tile-overlay {
+      position: absolute;
+      top: 2px;
+      right: 2px;
+      display: none;
+    }
+    .tile:hover .tile-overlay { display: flex; }
+    .tile-overlay span {
+      width: 14px;
+      height: 14px;
+      border-radius: 2px;
+      background: #000000cc;
+      color: #aaa;
+      font-size: 0.55rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+    .tile-overlay span:hover { color: #fff; background: #000; }
+
+    .add-tile {
+      border-style: dashed;
+      color: #666;
+      font-size: 1.1rem;
+      background: transparent;
+    }
+    .add-tile:hover { color: #ccc; }
+
+    /* Modal */
+    .modal-backdrop {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.6);
+      align-items: center;
+      justify-content: center;
+      z-index: 10;
+    }
+    .modal-backdrop.open { display: flex; }
+
+    .modal {
+      background: #171717;
+      border: 1px solid #2a2a2a;
+      border-radius: 4px;
+      padding: 16px;
+      width: 100%;
+      max-width: 280px;
+    }
+    .modal h2 {
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: #999;
+      margin: 0 0 12px;
+      letter-spacing: 0.2px;
+    }
+    .modal-field-row {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+    .modal-preview {
+      flex: 0 0 36px;
+      width: 36px;
+      height: 36px;
+      border: 1px solid #2a2a2a;
+      border-radius: 4px;
+      background: #0b0b0b;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+    .modal-preview img { width: 18px; height: 18px; }
+    .modal-preview .fallback {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: #666;
+      text-transform: uppercase;
+    }
+    .modal-field-row input { flex: 1; margin: 0; }
+    .modal input[type="text"] { margin-bottom: 8px; }
+    .modal .modal-actions {
+      display: flex;
+      gap: 8px;
+      margin-top: 4px;
+    }
+    .modal button {
+      flex: 1;
+      height: 32px;
+      font-size: 0.75rem;
+      font-family: inherit;
+      border: 1px solid #2a2a2a;
+      border-radius: 4px;
+      background: #1c1c1c;
+      color: #bbb;
+      cursor: pointer;
+    }
+    .modal button:hover { background: #232323; }
+    .modal button.primary { background: #2a2a2a; color: #eee; }
+    .modal button.primary:hover { background: #333; }
+    .modal button.danger:hover { color: #e05555; border-color: #4a2a2a; }
   </style>
 </head>
 <body>
 <div class="box">
-  <div class="row">
-    <input type="text" id="urlInput" placeholder="https://example.com" />
-    <button class="icon-btn" id="starBtn" type="button">
-      <svg id="starIcon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6">
-        <path d="M5 3h10a1 1 0 0 1 1 1v13l-6-3.5L4 17V4a1 1 0 0 1 1-1z"/>
-      </svg>
-    </button>
-  </div>
+  <input type="text" id="urlInput" placeholder="https://example.com" />
   <div class="error" id="err">Invalid URL</div>
 
   <div class="divider"></div>
-  <div class="bm-list" id="bmList"></div>
+
+  <div class="bm-bar" id="bmBar"></div>
 </div>
+
+<div class="modal-backdrop" id="modalBackdrop">
+  <div class="modal">
+    <h2 id="modalTitle">Add bookmark</h2>
+    <div class="modal-field-row">
+      <div class="modal-preview" id="modalPreview"><span class="fallback">?</span></div>
+      <input type="text" id="modalUrl" placeholder="https://example.com" />
+    </div>
+    <input type="text" id="modalName" placeholder="Name" />
+    <div class="modal-actions">
+      <button id="modalSave" class="primary">Save</button>
+      <button id="modalDelete" class="danger" style="display:none;">Delete</button>
+      <button id="modalCancel">Cancel</button>
+    </div>
+  </div>
+</div>
+
 <script>
   const input = document.getElementById('urlInput');
   const err = document.getElementById('err');
-  const starBtn = document.getElementById('starBtn');
-  const starIcon = document.getElementById('starIcon');
-  const bmList = document.getElementById('bmList');
-  let bookmarks = [];
+  const bmBar = document.getElementById('bmBar');
 
-  function updateStarState() {
-    const url = normalize(input.value);
-    const active = url && bookmarks.some(b => b.url === url);
-    starIcon.setAttribute('fill', active ? 'currentColor' : 'none');
-  }
+  const modalBackdrop = document.getElementById('modalBackdrop');
+  const modalTitle = document.getElementById('modalTitle');
+  const modalUrl = document.getElementById('modalUrl');
+  const modalName = document.getElementById('modalName');
+  const modalPreview = document.getElementById('modalPreview');
+  const modalDelete = document.getElementById('modalDelete');
+
+  let bookmarks = [];
+  let editingIndex = null;
 
   function normalize(url) {
-    url = url.trim();
+    url = (url || '').trim();
     if (!url) return null;
     if (!/^https?:\/\//i.test(url)) url = 'https://' + url;
     try { new URL(url); } catch { return null; }
     return url;
   }
 
-  function launch(url, mode) {
-    if (mode === 'same') window.location.href = url;
-    if (mode === 'tab') window.open(url, '_blank');
-    if (mode === 'window') window.open(url, '_blank', 'width=1100,height=750');
+  function launch(url) {
+    window.location.href = url;
   }
 
   function go() {
     const url = normalize(input.value);
     if (!url) { err.style.display = 'block'; return; }
     err.style.display = 'none';
-    launch(url, 'same');
+    launch(url);
   }
 
   input.addEventListener('keydown', e => {
     if (e.key === 'Enter') go();
   });
-
-  input.addEventListener('input', () => { err.style.display = 'none'; updateStarState(); });
+  input.addEventListener('input', () => { err.style.display = 'none'; });
 
   async function loadBookmarks() {
     try {
@@ -173,7 +257,6 @@
       bookmarks = [];
     }
     renderBookmarks();
-    updateStarState();
   }
 
   async function saveBookmarks() {
@@ -184,52 +267,132 @@
     }
   }
 
-  function renderBookmarks() {
-    bmList.innerHTML = '';
-    bookmarks.forEach((b, i) => {
-      const item = document.createElement('div');
-      item.className = 'bm-item';
-
-      const name = document.createElement('div');
-      name.className = 'bm-name';
-      name.textContent = b.name;
-      item.appendChild(name);
-
-      const actions = document.createElement('div');
-      actions.className = 'bm-actions';
-
-      const del = document.createElement('span');
-      del.textContent = '✕';
-      del.onclick = async (e) => {
-        e.stopPropagation();
-        bookmarks.splice(i, 1);
-        renderBookmarks();
-        updateStarState();
-        await saveBookmarks();
-      };
-      actions.appendChild(del);
-
-      item.appendChild(actions);
-      item.onclick = () => { launch(b.url, 'same'); };
-      bmList.appendChild(item);
-    });
+  function faviconUrl(url) {
+    try {
+      const host = new URL(url).hostname;
+      return `https://www.google.com/s2/favicons?sz=64&domain=${host}`;
+    } catch {
+      return null;
+    }
   }
 
-  starBtn.addEventListener('click', async () => {
-    const url = normalize(input.value);
-    if (!url) { err.style.display = 'block'; return; }
-    err.style.display = 'none';
-    const idx = bookmarks.findIndex(b => b.url === url);
-    if (idx >= 0) {
-      bookmarks.splice(idx, 1);
+  function setPreview(container, url, fallbackChar) {
+    container.innerHTML = '';
+    const fav = faviconUrl(url);
+    if (fav) {
+      const img = document.createElement('img');
+      img.src = fav;
+      img.alt = '';
+      img.onerror = () => {
+        img.remove();
+        const span = document.createElement('span');
+        span.className = 'fallback';
+        span.textContent = fallbackChar;
+        container.appendChild(span);
+      };
+      container.appendChild(img);
     } else {
-      const name = url.replace(/^https?:\/\//i, '').replace(/\/$/, '');
-      bookmarks.unshift({ name, url });
+      const span = document.createElement('span');
+      span.className = 'fallback';
+      span.textContent = fallbackChar;
+      container.appendChild(span);
     }
-    renderBookmarks();
-    updateStarState();
-    await saveBookmarks();
+  }
+
+  function updateModalPreview() {
+    const url = normalize(modalUrl.value);
+    const fallback = (modalName.value || modalUrl.value || '?').trim().charAt(0) || '?';
+    if (url) {
+      setPreview(modalPreview, url, fallback);
+    } else {
+      modalPreview.innerHTML = `<span class="fallback">${fallback}</span>`;
+    }
+  }
+
+  modalUrl.addEventListener('input', updateModalPreview);
+  modalName.addEventListener('input', updateModalPreview);
+
+  function openModal(mode, index) {
+    editingIndex = mode === 'edit' ? index : null;
+    if (mode === 'edit') {
+      modalTitle.textContent = 'Edit bookmark';
+      modalUrl.value = bookmarks[index].url;
+      modalName.value = bookmarks[index].name;
+      modalDelete.style.display = 'block';
+    } else {
+      modalTitle.textContent = 'Add bookmark';
+      const prefill = normalize(input.value) || '';
+      modalUrl.value = prefill;
+      modalName.value = prefill ? prefill.replace(/^https?:\/\//i, '').replace(/\/$/, '') : '';
+      modalDelete.style.display = 'none';
+    }
+    updateModalPreview();
+    modalBackdrop.classList.add('open');
+    modalUrl.focus();
+  }
+
+  function closeModal() {
+    modalBackdrop.classList.remove('open');
+    editingIndex = null;
+  }
+
+  modalBackdrop.addEventListener('click', (e) => {
+    if (e.target === modalBackdrop) closeModal();
   });
+
+  document.getElementById('modalCancel').onclick = closeModal;
+
+  document.getElementById('modalSave').onclick = async () => {
+    const url = normalize(modalUrl.value);
+    if (!url) { modalUrl.style.borderColor = '#e05555'; return; }
+    modalUrl.style.borderColor = '';
+    const name = modalName.value.trim() || url.replace(/^https?:\/\//i, '').replace(/\/$/, '');
+    if (editingIndex !== null) {
+      bookmarks[editingIndex] = { name, url };
+    } else {
+      bookmarks.push({ name, url });
+    }
+    closeModal();
+    renderBookmarks();
+    await saveBookmarks();
+  };
+
+  modalDelete.onclick = async () => {
+    if (editingIndex === null) return;
+    bookmarks.splice(editingIndex, 1);
+    closeModal();
+    renderBookmarks();
+    await saveBookmarks();
+  };
+
+  function renderBookmarks() {
+    bmBar.innerHTML = '';
+
+    bookmarks.forEach((b, i) => {
+      const tile = document.createElement('div');
+      tile.className = 'tile';
+      tile.setAttribute('aria-label', b.name);
+      setPreview(tile, b.url, (b.name || '?').charAt(0));
+
+      const overlay = document.createElement('div');
+      overlay.className = 'tile-overlay';
+      const editSpan = document.createElement('span');
+      editSpan.textContent = '✎';
+      editSpan.onclick = (e) => { e.stopPropagation(); openModal('edit', i); };
+      overlay.appendChild(editSpan);
+      tile.appendChild(overlay);
+
+      tile.onclick = () => launch(b.url);
+      bmBar.appendChild(tile);
+    });
+
+    const addTile = document.createElement('div');
+    addTile.className = 'tile add-tile';
+    addTile.textContent = '+';
+    addTile.setAttribute('aria-label', 'Add bookmark');
+    addTile.onclick = () => openModal('add');
+    bmBar.appendChild(addTile);
+  }
 
   loadBookmarks();
 </script>
